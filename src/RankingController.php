@@ -40,6 +40,12 @@ class RankingController extends BitrixController
         }
 
         $allDeals = $this->getDeals(['CLOSED' => 'Y', '>OPPORTUNITY' => 0], ['ID', 'CLOSEDATE', 'OPPORTUNITY', 'ASSIGNED_BY_ID']);
+
+        if(empty($allDeals)) {
+            $this->response->sendError(404, "No deals found");
+            return;
+        }
+        
         $deals = array_filter($allDeals, function ($deal) use ($id) {
             return $deal['ASSIGNED_BY_ID'] == $id;
         });
